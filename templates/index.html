@@ -9,18 +9,61 @@
     <title>File Comparison</title>
 </head>
 <body>
-    <h1>
-        <img src="{{ url_for('static', filename='expressjs.png') }}" alt="File Icon" width="50" height="50">
-        File Comparison
-    </h1>
-    <form action="/app" method="post" enctype="multipart/form-data">
-        <label for="all_users">Select Excel file with all users:</label>
-        <input type="file" name="all_users" accept=".xlsx" required onchange="handleFileSelect(this)" ><br>
-        
-        <label for="submitted_users">Select Excel file with submitted users:</label>
-        <input type="file" name="submitted_users" accept=".xlsx" required onchange="handleFileSelect(this)" ><br>
+    <div class="container">
+        <h1>
+            <img src="{{ url_for('static', filename='expressjs.png') }}" alt="File Icon" width="50" height="50">
+            File Comparison
+        </h1>
 
-        <input type="submit" value="Compare and Create" id="submitBtn">
-    </form>
+        <!-- Flash Messages Section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/app" method="post" enctype="multipart/form-data">
+            <label for="all_users">Select Excel file with all users:</label>
+            <input type="file" name="all_users" accept=".xlsx" required onchange="toggleInput(this, 'all')">
+            
+            <label for="use_dropdown_all">Use dropdown for column name (all users):</label>
+            <!-- <input type="checkbox" name="use_dropdown_all" id="use_dropdown_all" onchange="hideOrShowInput('all')"> -->
+            <div >
+
+                <select name="all_column_name" id="all_column_name" required>
+                    <!-- Options will be dynamically added using JavaScript -->
+                </select>
+             
+                <!-- <input type="text" name="all_column_name_input" id="all_column_name_input" placeholder="Enter the column name exactly as it appears in the dataset"> -->
+            </div>
+<hr>
+            <label for="submitted_users">Select Excel file with submitted users:</label>
+            <input type="file" name="submitted_users" accept=".xlsx" required onchange="toggleInput(this, 'submitted')" >
+            
+            <label for="use_dropdown_submitted">Use dropdown for column name (submitted users):</label>
+    
+                <!-- <input type="checkbox" name="use_dropdown_submitted" id="use_dropdown_submitted" onchange="hideOrShowInput('submitted')"> -->
+           
+
+            <div >
+                <select name="submitted_column_name" id="submitted_column_name"required>
+                    <!-- Options will be dynamically added using JavaScript -->
+                </select>
+    
+                <!-- <input type="text" name="submitted_column_name_input" id="submitted_column_name_input" placeholder="Enter the column name exactly as it appears in the dataset"> -->
+            </div>
+<hr>
+            <input type="submit" value="Compare and Create" id="submitBtn">
+        </form>
+    </div>
+
+
+    
 </body>
 </html>

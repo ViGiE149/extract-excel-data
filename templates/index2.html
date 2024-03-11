@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <title>File Comparison</title>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <img src="{{ url_for('static', filename='expressjs.png') }}" alt="File Icon" width="50" height="50">
+            File Comparison
+        </h1>
+
+        <!-- Flash Messages Section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="/app" method="post" enctype="multipart/form-data">
+            <label for="all_column_name">Enter the column name (all users):</label>
+            <input type="text" name="all_column_name" required>
+
+            <label for="all_users">Select Excel file with all users:</label>
+            <input type="file" name="all_users" accept=".xlsx" required onchange="handleFileSelect(this)">
+
+            <label for="submited_column_name">Enter the column name (submitted users):</label>
+            <input type="text" name="submited_column_name" required>
+
+            <label for="submitted_users">Select Excel file with submitted users:</label>
+            <input type="file" name="submitted_users" accept=".xlsx" required onchange="handleFileSelect(this)">
+
+            <input type="submit" value="Compare and Create" id="submitBtn">
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>
