@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_cors import CORS
+import os
 from networkx import dfs_edges
 import pandas as pd
 from urllib.parse import quote
@@ -31,13 +32,17 @@ def compare_files():
 
         # Compare files to get users who did not submit
         not_submitted_df = all_users_df[
-            ~all_users_df[all_column_name].str.strip().isin(submitted_users_df[submitted_column_name].str.strip())
-        ]
-     
+        ~all_users_df[all_column_name].astype(str).str.strip().isin(submitted_users_df[submitted_column_name].astype(str).str.strip())
+         ]
 
+     
         # Create a new Excel file with users who did not submit
         not_submitted_file = 'not_submitted_users.xlsx'
-        not_submitted_df.to_excel(not_submitted_file, index=False)
+       # Modify the path to save the file in the user's download folder
+        download_folder = os.path.expanduser("~")  # Get the user's home directory
+        not_submitted_file_path = os.path.join(download_folder, 'Downloads', not_submitted_file)
+
+        not_submitted_df.to_excel(not_submitted_file_path, index=False)
 
         flash(f'Success! File "{not_submitted_file}" created with users who did not submit.', 'success')
         return redirect(url_for('index'))
@@ -50,7 +55,7 @@ def compare_files():
         app.logger.error(f'Error processing files: {str(e)}')
         flash(f'Error: {str(e)}', 'error')
         return redirect(url_for('index'))
-
+    
 @app.route('/get_column_names', methods=['POST'])
 def get_column_names():
     try:

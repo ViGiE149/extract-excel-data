@@ -62,7 +62,10 @@ function toggleInput(fileInput, inputType) {
 
     if (fileInput) {
         //input.style.display = 'none';  // Hide the input field
-        //dropdown.style.display = 'inline'
+        //dropdown.style.display = 'inline'h
+
+        handleFileSelect(fileInput) 
+
         fetchColumnNames(fileInput, dropdown, inputType);
     }// } else {
     //     input.style.display = 'inline';  // Show the input field
